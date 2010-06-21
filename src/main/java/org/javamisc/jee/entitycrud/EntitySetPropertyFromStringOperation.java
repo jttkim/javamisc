@@ -35,9 +35,18 @@ public class EntitySetPropertyFromStringOperation extends EntityOperation
       BeanUtil.setProperty(entity, this.propertyName, new Double(Double.parseDouble(this.propertyValue)));
       return (true);
     }
+    else if (entityAccess.isEntityClass(propertyType))
+    {
+      // FIXME: assuming that entity IDs are Integers
+      Integer associatedEntityId = new Integer(Integer.parseInt(this.propertyValue));
+      Object associatedEntity = entityAccess.findEntity(propertyType, associatedEntityId);
+      // FIXME: setting up association unidirectionally only
+      BeanUtil.setProperty(entity, this.propertyName, associatedEntity);
+      return (true);
+    }
     else
     {
-      System.err.println(String.format("EtnitySetPropertyFromStringOperation.apply: failed to set property %s on entity %s\n", this.propertyName, entity.getClass().toString()));
+      System.err.println(String.format("EntitySetPropertyFromStringOperation.apply: failed to set property %s on entity %s\n", this.propertyName, entity.getClass().toString()));
       return (false);
     }
   }

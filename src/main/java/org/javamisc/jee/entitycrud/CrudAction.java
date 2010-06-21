@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -209,11 +210,43 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
   }
 
 
+  protected static List<String> orderedPropertyList(Class<?> entityClass)
+  {
+    Set<String> propertyNameSet = findPropertyNameSet(entityClass);
+    CrudConfig crudConfig = entityClass.getAnnotation(CrudConfig.class);
+    String[] propertyOrder = {"*"};
+    if (crudConfig != null)
+    {
+      propertyOrder = crudConfig.propertyOrder();
+    }
+    List<String> orderedPropertyList = new ArrayList<String>();
+    boolean addRemainingProperties = false;
+    for (String propertyName : propertyOrder)
+    {
+      if ("*".equals(propertyName))
+      {
+	addRemainingProperties = true;
+	break;
+      }
+      if (propertyNameSet.contains(propertyName))
+      {
+	propertyNameSet.remove(propertyName);
+	orderedPropertyList.add(propertyName);
+      }
+    }
+    if (addRemainingProperties)
+    {
+      orderedPropertyList.addAll(propertyNameSet);
+    }
+    return (orderedPropertyList);
+  }
+
+
   protected String entityHtmlTable(Object entity) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
   {
-    Set<String> propertyNameSet = findPropertyNameSet(entity);
+    List<String> propertyList = orderedPropertyList(entity.getClass());
     String s = "<table>\n";
-    for (String propertyName : propertyNameSet)
+    for (String propertyName : propertyList)
     {
       s += propertyHtmlTableRow(entity, propertyName);
     }
@@ -341,7 +374,7 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
   {
     // FIXME: consider introducing an IsacrodiEntity interface declaring getId (and setId), so that we can use typecasts to get at ids.
     Object id = getProperty(entity, "id");
-    Set<String> propertyNameSet = findPropertyNameSet(entity);
+    List<String> propertyNameList = orderedPropertyList(entity.getClass());
     // FIXME: order properties?
     String s = "<form method=\"post\" action=\"crud\">\n";
     s += "<input type=\"hidden\" name=\"crudOp\" value=\"update\"/>";
@@ -351,7 +384,7 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
       s += String.format("<input type=\"hidden\" name=\"entityId\" value=\"%s\"/>", id.toString());
     }
     s += "<table>\n";
-    for (String propertyName : propertyNameSet)
+    for (String propertyName : propertyNameList)
     {
       if (!isHidden(entity.getClass(), propertyName))
       {

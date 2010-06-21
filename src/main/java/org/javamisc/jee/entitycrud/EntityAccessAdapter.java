@@ -130,7 +130,6 @@ public class EntityAccessAdapter implements EntityAccess
 
   public boolean updateEntity(Class<?> entityClass, Integer entityId, Set<EntityOperation> entityOperationSet) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
   {
-    // FIXME: propertyMap may need some sanitising, especially it must not contain an id entry (!!)
     Object entity = BeanUtil.constructDefaultInstance(entityClass);
     if (entityId != null)
     {
@@ -141,11 +140,14 @@ public class EntityAccessAdapter implements EntityAccess
     {
       System.err.println(String.format("EntityAccessAdapter.updateEntity: applying %s\n", entityOperation.toString()));
       success = success && entityOperation.apply(entity, this);
+      System.err.println(String.format("entity class %s, state: %s\n", entity.getClass().getSimpleName(), entity.toString()));
     }
     if (entityId == null)
     {
       this.entityManager.persist(entity);
     }
+    System.err.println(String.format("updated %s entity: %s\n", entity.getClass().getSimpleName(), entity.toString()));
+    this.entityManager.flush();
     return (success);
   }
 
