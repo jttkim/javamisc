@@ -13,7 +13,7 @@ public class EntityCrudTest
   {
     Assert.assertTrue("something".equals(BeanUtil.extractPropertyName("getSomething")));
     Assert.assertTrue("something".equals(BeanUtil.extractPropertyName("setSomething")));
-    Assert.assertTrue("something".equals(BeanUtil.extractPropertyName("isasdsomething")));
+    Assert.assertTrue("something".equals(BeanUtil.extractPropertyName("isSomething")));
   }
 }
 
