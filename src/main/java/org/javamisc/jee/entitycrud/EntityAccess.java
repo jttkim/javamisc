@@ -23,6 +23,10 @@ public interface EntityAccess
    * @return {@code true} if the class is an entity class
    */
   boolean isEntityInstance(Object obj);
+
+  /**
+   *
+   */
   <EntityClass> EntityClass findEntity(Class<EntityClass> entityClass, Integer id);
   <EntityClass> List<EntityClass> findEntityList(Class<EntityClass> entityClass);
   boolean updateEntity(Class<?> entityClass, Integer entityId, Set<EntityOperation> entityOperationSet) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException;
