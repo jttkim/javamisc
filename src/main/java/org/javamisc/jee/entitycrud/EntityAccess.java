@@ -8,6 +8,12 @@ import java.util.Set;
 
 public interface EntityAccess
 {
+  /**
+   * Determine whether a class is an entity class.
+   *
+   * @param aClass the class to be tested
+   * @return {@code true} if the class is an entity class
+   */
   boolean isEntityClass(Class<?> aClass);
   boolean isEntityInstance(Object obj);
   <EntityClass> EntityClass findEntity(Class<EntityClass> entityClass, Integer id);
