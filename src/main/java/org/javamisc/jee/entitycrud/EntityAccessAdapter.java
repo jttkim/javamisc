@@ -38,7 +38,7 @@ public class EntityAccessAdapter implements EntityAccess
   /**
    * Determine whether an object is an instance of an entity class.
    *
-   * <p>This method relies on {@see isEntityClass}.</p>
+   * <p>This method relies on {@link #isEntityClass}.</p>
    *
    * @param obj the object to be checked
    * @return {@code true} if the object is an entity instance

@@ -111,7 +111,7 @@ public class BeanUtil
    * is no provision for boolean accessors prefixed with {@code is}.</p>
    *
    * @param propertyName the name of the property
-   @ return the corresponding accessor name
+   * @return the corresponding accessor name
    */
   public static String makeAccessorName(String propertyName)
   {
@@ -127,7 +127,7 @@ public class BeanUtil
    * converts the first character of the property to upper case.</p>
    *
    * @param propertyName the name of the property
-   @ return the corresponding mutator name
+   * @return the corresponding mutator name
    */
   public static String makeMutatorName(String propertyName)
   {
@@ -478,7 +478,7 @@ public class BeanUtil
   /**
    * Get a property from an entity (or generally a bean like object).
    *
-   * @param object the object to get the property from
+   * @param entity the entity (or general object) to get the property from
    * @param propertyName the name of the property to get
    * @return the property's value
    */
@@ -495,7 +495,7 @@ public class BeanUtil
   /**
    * Set a property on an entity (or generally a bean like object).
    *
-   * @param object the object to get the property from
+   * @param entity the entity (or general object) to get the property from
    * @param propertyName the name of the property to get
    * @param propertyValue the value to set
    */
@@ -522,9 +522,9 @@ public class BeanUtil
    * <tr><td>{@code Double}</td><td>conversion by {@code Double.parseDouble}</td></tr>
    * </table>
    *
-   * @param object the object to get the property from
+   * @param entity the object to get the property from
    * @param propertyName the name of the property to get
-   * @param propertyValue the value to set
+   * @param propertyValueString the value to set, as a string
    */
   public static void setPropertyFromString(Object entity, String propertyName, String propertyValueString) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
   {

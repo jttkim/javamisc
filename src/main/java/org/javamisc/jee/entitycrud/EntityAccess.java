@@ -19,7 +19,7 @@ public interface EntityAccess
   /**
    * Determine whether an object is an instance of an entity class.
    *
-   * @param aClass the class to be tested
+   * @param obj the object to be tested
    * @return {@code true} if the class is an entity class
    */
   boolean isEntityInstance(Object obj);

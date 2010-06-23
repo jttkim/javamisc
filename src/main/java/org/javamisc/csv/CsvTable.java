@@ -83,7 +83,7 @@ public class CsvTable
   /**
    * Advance to next row.
    *
-   * @return {@code true} if there was a next row, {@false} otherwise
+   * @return {@code true} if there was a next row, {@code false} otherwise
    */
   public boolean next() throws IOException
   {

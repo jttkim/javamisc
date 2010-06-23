@@ -44,8 +44,8 @@ public @interface CrudConfig
    * <p>An empty string (the default value of this element) disables
    * this feature.</p>
    *
-   * <p>This configuration takes precedence over the {@see
-   * propertyOrder} element.</p>
+   * <p>This configuration takes precedence over the {@link
+   * #propertyOrder} element.</p>
    */
   String entityViewFormat() default "";
 }

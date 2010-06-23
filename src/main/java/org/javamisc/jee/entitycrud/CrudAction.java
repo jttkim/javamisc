@@ -115,7 +115,7 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
    * pairs of all unique properties of the entity.</p>
    *
    * @param entity the entity
-   * @retrun text for the link to the entity
+   * @return text for the link to the entity
    */
   public String entityLinkText(Object entity) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
   {
