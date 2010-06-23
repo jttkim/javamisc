@@ -14,8 +14,6 @@ public class Util
   }
 
 
-
-
   /**
    * Helper method to cast values to parameterised types without
    * triggering an "unchecked" warning.
