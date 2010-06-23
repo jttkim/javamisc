@@ -15,6 +15,13 @@ public interface EntityAccess
    * @return {@code true} if the class is an entity class
    */
   boolean isEntityClass(Class<?> aClass);
+
+  /**
+   * Determine whether an object is an instance of an entity class.
+   *
+   * @param aClass the class to be tested
+   * @return {@code true} if the class is an entity class
+   */
   boolean isEntityInstance(Object obj);
   <EntityClass> EntityClass findEntity(Class<EntityClass> entityClass, Integer id);
   <EntityClass> List<EntityClass> findEntityList(Class<EntityClass> entityClass);
