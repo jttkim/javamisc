@@ -99,5 +99,13 @@ public class EntityCrudTest
     crudAction.setEntityClassName("String");
     Assert.assertEquals(crudAction.getEntityClassName(), "String");
   }
+
+
+  @Test
+  public void testEntityAccessAdapter()
+  {
+    EntityAccessAdapter entityAccessAdapter = new EntityAccessAdapter();
+    Assert.assertFalse(entityAccessAdapter.isEntityInstance("blah"));
+  }
 }
 
