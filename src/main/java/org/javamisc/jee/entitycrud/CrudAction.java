@@ -466,21 +466,15 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
   }
 
 
-  public void setEntityClassName(String entityClassName)
-  {
-    this.entityClassName = entityClassName;
-  }
-
-
   public String getEntityClassName()
   {
     return (this.entityClassName);
   }
 
 
-  public void setEntityId(String entityId)
+  public void setEntityClassName(String entityClassName)
   {
-    this.entityId = entityId;
+    this.entityClassName = entityClassName;
   }
 
 
@@ -496,15 +490,15 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
   }
 
 
-  public void setVerbosityLevel(int verbosityLevel)
-  {
-    this.verbosityLevel = verbosityLevel;
-  }
-
-
   public int getVerbosityLevel()
   {
     return (this.verbosityLevel);
+  }
+
+
+  public void setVerbosityLevel(int verbosityLevel)
+  {
+    this.verbosityLevel = verbosityLevel;
   }
 
 
@@ -512,6 +506,12 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
   {
     this.logInfo("returning entity id " + this.entityId);
     return (this.entityId);
+  }
+
+
+  public void setEntityId(String entityId)
+  {
+    this.entityId = entityId;
   }
 
 
