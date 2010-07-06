@@ -69,12 +69,7 @@ public class EntityAccessAdapter implements EntityAccess
   }
 
 
-  /**
-   * Fetch entities in collections mapping to-many associations.
-   *
-   * @param entity the entity for which to fetch collections
-   */
-  private void fetchCollections(Object entity)
+  public void fetchCollections(Object entity)
   {
     Class<?> entityClass = entity.getClass();
     for (Method method : entityClass.getMethods())
@@ -103,7 +98,8 @@ public class EntityAccessAdapter implements EntityAccess
   }
 
 
-  public <EntityClass> EntityClass findEntity(Class<EntityClass> entityClass, Integer id)
+  @Override
+  public <EntityClass> EntityClass findEntity(Class<EntityClass> entityClass, Object id)
   {
     EntityClass entity = this.entityManager.find(entityClass, id);
     if (entity != null)

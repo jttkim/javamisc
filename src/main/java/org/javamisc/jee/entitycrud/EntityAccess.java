@@ -25,9 +25,30 @@ public interface EntityAccess
   boolean isEntityInstance(Object obj);
 
   /**
+   * Fetch entities in collections mapping to-many associations.
    *
+   * @param entity the entity for which to fetch collections
    */
-  <EntityClass> EntityClass findEntity(Class<EntityClass> entityClass, Integer id);
+  void fetchCollections(Object entity);
+
+  /**
+   * Find an entity by its id.
+   *
+   * <p>The {@code id} object must be suitable as a key for the entity
+   * class.</p>
+   *
+   * @param entityClass the entity class
+   * @param id the id of the entity
+   * @return the entity
+   */
+  <EntityClass> EntityClass findEntity(Class<EntityClass> entityClass, Object id);
+
+  /**
+   * Find a list of all persisted entities of the entity class.
+   *
+   * @param entityClass the entity class
+   * @return the list of all persisted entities
+   */
   <EntityClass> List<EntityClass> findEntityList(Class<EntityClass> entityClass);
   boolean updateEntity(Class<?> entityClass, Integer entityId, Set<EntityOperation> entityOperationSet) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException;
   boolean removeEntity(Class<?> entityClass, Integer entityId);
