@@ -53,7 +53,7 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
 
   public static String htmlEscape(String s)
   {
-    return(s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"));
+    return(s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br/>\n"));
   }
 
 
