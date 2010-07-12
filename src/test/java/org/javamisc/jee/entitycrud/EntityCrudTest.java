@@ -64,6 +64,7 @@ class DummyEntity
   }
 
 
+  @Column(unique = true)
   public String getName()
   {
     return (this.name);
@@ -175,6 +176,16 @@ public class EntityCrudTest
     Double x = new Double(47.11);
     BeanUtil.setPropertyFromString(e, "x", String.format("%e", x.doubleValue()));
     Assert.assertEquals(x, BeanUtil.getProperty(e, "x"));
+  }
+
+
+  @Test
+  public void testFindUnique()
+  {
+    Set uniquePropertyNameSet = BeanUtil.findUniquePropertyNameSet(DummyEntity.class);
+    Assert.assertTrue(uniquePropertyNameSet.contains("id"));
+    Assert.assertTrue(uniquePropertyNameSet.contains("name"));
+    Assert.assertFalse(uniquePropertyNameSet.contains("x"));
   }
 }
 
