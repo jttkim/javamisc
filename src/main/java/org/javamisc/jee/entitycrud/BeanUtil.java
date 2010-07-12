@@ -528,7 +528,7 @@ public class BeanUtil
    */
   public static void setPropertyFromString(Object entity, String propertyName, String propertyValueString) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
   {
-    Class<?> valueClass = findPropertyType(entity.getClass(), propertyValueString);
+    Class<?> valueClass = findPropertyType(entity.getClass(), propertyName);
     Object propertyValue = null;
     if (String.class.isAssignableFrom(valueClass))
     {
@@ -549,10 +549,6 @@ public class BeanUtil
     {
       throw new IllegalArgumentException("property type not (yet) supported");
     }
-    String mutatorName = makeMutatorName(propertyName);
-    Class<?> entityClass = entity.getClass();
-    Method mutatorMethod = entityClass.getMethod(mutatorName, valueClass);
-    // FIXME: ignoring the return value, assuming method returns void
-    mutatorMethod.invoke(entity, propertyValue);
+    setProperty(entity, propertyName, propertyValue);
   }
 }

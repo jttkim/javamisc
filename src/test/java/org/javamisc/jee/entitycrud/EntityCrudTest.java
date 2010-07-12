@@ -8,6 +8,14 @@ import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.HashSet;
 
+import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.Column;
+import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
+
 
 class DummyCrudAction extends CrudAction
 {
@@ -32,6 +40,51 @@ class DummyCrudAction extends CrudAction
   public boolean isReadOnly(Class<?> entityClass, String propertyName)
   {
     return (false);
+  }
+}
+
+
+@Entity
+class DummyEntity
+{
+  private Integer id;
+  private String name;
+  private Double x;
+
+  @Id
+  public Integer getId()
+  {
+    return (this.id);
+  }
+
+
+  public void setId(Integer id)
+  {
+    this.id = id;
+  }
+
+
+  public String getName()
+  {
+    return (this.name);
+  }
+
+
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+
+
+  public Double getX()
+  {
+    return (this.x);
+  }
+
+
+  public void setX(Double x)
+  {
+    this.x = x;
   }
 }
 
@@ -106,6 +159,22 @@ public class EntityCrudTest
   {
     EntityAccessAdapter entityAccessAdapter = new EntityAccessAdapter();
     Assert.assertFalse(entityAccessAdapter.isEntityInstance("blah"));
+  }
+
+
+  @Test
+  public void testSetProperty() throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+  {
+    DummyEntity e = new DummyEntity();
+    Integer id = new Integer(4711);
+    BeanUtil.setPropertyFromString(e, "id", String.format("%d", id.intValue()));
+    Assert.assertEquals(id, BeanUtil.getProperty(e, "id"));
+    String name = "Humpty Dumpty";
+    BeanUtil.setPropertyFromString(e, "name", name);
+    Assert.assertEquals(name, BeanUtil.getProperty(e, "name"));
+    Double x = new Double(47.11);
+    BeanUtil.setPropertyFromString(e, "x", String.format("%e", x.doubleValue()));
+    Assert.assertEquals(x, BeanUtil.getProperty(e, "x"));
   }
 }
 
