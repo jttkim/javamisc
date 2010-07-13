@@ -5,8 +5,13 @@ import org.junit.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.persistence.Id;
 import javax.persistence.Entity;
@@ -16,12 +21,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
 
+import static org.javamisc.Util.genericTypecast;
+
 
 class DummyCrudAction extends CrudAction
 {
-  public DummyCrudAction()
+  public DummyCrudAction(EntityAccess entityAccess)
   {
-    super(null);
+    super(entityAccess);
   }
 
 
@@ -50,6 +57,35 @@ class DummyEntity
   private Integer id;
   private String name;
   private Double x;
+  private DummyEntity dummyDaddy;
+  private Collection<DummyEntity> dummyKidCollection;
+
+
+  public DummyEntity()
+  {
+    super();
+    this.dummyKidCollection = new HashSet<DummyEntity>();
+  }
+
+
+  public DummyEntity(Integer id)
+  {
+    this();
+    this.id = id;
+    name = String.format("dummy %d", id.intValue());
+  }
+
+
+  public DummyEntity(Integer id, String name, double x)
+  {
+    this(id);
+    if (name != null)
+    {
+      this.name = name;
+    }
+    this.x = x;
+  }
+
 
   @Id
   public Integer getId()
@@ -67,6 +103,14 @@ class DummyEntity
   @Column(unique = true)
   public String getName()
   {
+    if (this.name == null)
+    {
+      System.err.println("*** DummyEntity with null name ***");
+    }
+    else
+    {
+      System.err.printf("DummyEntity.getName: returning %s\n", this.name);
+    }
     return (this.name);
   }
 
@@ -86,6 +130,110 @@ class DummyEntity
   public void setX(Double x)
   {
     this.x = x;
+  }
+
+
+  @ManyToOne
+  public DummyEntity getDummyDaddy()
+  {
+    return (this.dummyDaddy);
+  }
+
+
+  public void setDummyDaddy(DummyEntity dummyDaddy)
+  {
+    this.dummyDaddy = dummyDaddy;
+  }
+
+
+  @OneToMany(mappedBy = "dummyDaddy")
+  public Collection<DummyEntity> getDummyKidCollection()
+  {
+    return (this.dummyKidCollection);
+  }
+
+
+  public void setDummyKidCollection(Collection<DummyEntity> dummyKidCollection)
+  {
+    this.dummyKidCollection = dummyKidCollection;
+  }
+}
+
+
+class DummyEntityAccess extends EntityAccessAdapter
+{
+  private Map<Integer, DummyEntity> dummyEntityMap;
+
+
+  public DummyEntityAccess()
+  {
+    this.dummyEntityMap = new HashMap<Integer, DummyEntity>();
+    DummyEntity d = new DummyEntity(new Integer(1), "daddy", 1000000.0);
+    this.dummyEntityMap.put(d.getId(), d);
+  }
+
+
+  @Override
+  public <EntityClass> EntityClass findEntity(Class<EntityClass> entityClass, Object id)
+  {
+    Integer entityId = (Integer) id;
+    DummyEntity d;
+    if (!this.dummyEntityMap.containsKey(entityId))
+    {
+      d = new DummyEntity(entityId, null, 0.0);
+      this.dummyEntityMap.put(entityId, d);
+    }
+    else
+    {
+      d = this.dummyEntityMap.get(entityId);
+    }
+    if (entityId.intValue() != 1)
+    {
+      DummyEntity dummyDaddy = this.dummyEntityMap.get(new Integer(1));
+      d.setDummyDaddy(dummyDaddy);
+      dummyDaddy.getDummyKidCollection().add(d);
+    }
+    return ((EntityClass) d);
+  }
+
+
+  @Override
+  public <EntityClass> List<EntityClass> findEntityList(Class<EntityClass> entityClass)
+  {
+    ArrayList<DummyEntity> l = new ArrayList<DummyEntity>(this.dummyEntityMap.values());
+    ArrayList<EntityClass> ll = genericTypecast(l);
+    return (ll);
+  }
+
+
+  @Override
+  public boolean updateEntity(Class<?> entityClass, Integer entityId, Set<EntityOperation> entityOperationSet) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException
+  {
+    DummyEntity d;
+    if (this.dummyEntityMap.containsKey(entityId))
+    {
+      d = this.dummyEntityMap.get(entityId);
+    }
+    else
+    {
+      d = new DummyEntity(entityId, null, 0.0);
+    }
+    for (EntityOperation op : entityOperationSet)
+    {
+      if (!op.apply(d, this))
+      {
+	return (false);
+      }
+    }
+    this.dummyEntityMap.put(d.getId(), d);
+    return (true);
+  }
+
+
+  @Override
+  public boolean removeEntity(Class<?> entityClass, Integer entityId)
+  {
+    return (this.dummyEntityMap.remove(entityId) != null);
   }
 }
 
@@ -145,17 +293,6 @@ public class EntityCrudTest
 
 
   @Test
-  public void testCrudAction()
-  {
-    CrudAction crudAction = new DummyCrudAction();
-    crudAction.setEntityId("4711");
-    Assert.assertEquals(crudAction.getEntityId(), "4711");
-    crudAction.setEntityClassName("String");
-    Assert.assertEquals(crudAction.getEntityClassName(), "String");
-  }
-
-
-  @Test
   public void testEntityAccessAdapter()
   {
     EntityAccessAdapter entityAccessAdapter = new EntityAccessAdapter();
@@ -186,6 +323,36 @@ public class EntityCrudTest
     Assert.assertTrue(uniquePropertyNameSet.contains("id"));
     Assert.assertTrue(uniquePropertyNameSet.contains("name"));
     Assert.assertFalse(uniquePropertyNameSet.contains("x"));
+  }
+
+
+  @Test
+  public void testEntityAccess()
+  {
+    DummyEntityAccess a = new DummyEntityAccess();
+    DummyEntity d;
+    for (int i = 2; i < 5; i ++)
+    {
+      d = a.findEntity(DummyEntity.class, new Integer(i));
+    }
+    d = a.findEntity(DummyEntity.class, new Integer(1));
+    // nothing really to assert here
+    a.fetchCollections(d);
+  }
+
+
+  @Test
+  public void testCrudAction() throws Exception
+  {
+    CrudAction crudAction = new DummyCrudAction(new DummyEntityAccess());
+    crudAction.setEntityId("4711");
+    Assert.assertEquals(crudAction.getEntityId(), "4711");
+    crudAction.setEntityClassName("String");
+    Assert.assertEquals(crudAction.getEntityClassName(), "String");
+    crudAction.setEntityClassName("DummyEntity");
+    crudAction.getEntityHtml();
+    crudAction.setEntityId("1");
+    crudAction.getEntityHtml();
   }
 }
 

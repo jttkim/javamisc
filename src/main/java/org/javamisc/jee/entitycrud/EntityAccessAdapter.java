@@ -148,9 +148,9 @@ public class EntityAccessAdapter implements EntityAccess
   }
 
 
-  public boolean removeEntity(Class<?> entityClass, Integer id)
+  public boolean removeEntity(Class<?> entityClass, Integer entityId)
   {
-    Object entity = this.entityManager.find(entityClass, id);
+    Object entity = this.entityManager.find(entityClass, entityId);
     if (entity == null)
     {
       return (false);
