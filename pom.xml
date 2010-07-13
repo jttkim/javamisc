@@ -52,6 +52,16 @@
           </formats>
         </configuration>
       </plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-checkstyle-plugin</artifactId>
+	<version>2.5</version>
+	<configuration>
+	  <configLocation>${project.basedir}/javamisc_checks.xml</configLocation>
+	  <outputFileFormat>plain</outputFileFormat>
+	  <outputFile>${project.build.directory}/checkstyle-result.txt</outputFile>
+	</configuration>
+      </plugin>
     </plugins>
   </reporting>
 

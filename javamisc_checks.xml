@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<!-- module name="Checker">
+  <module name="JavadocPackage"/>
+    <module name="AvoidStarImport"/>
+    <module name="LeftCurly"/>
+  </module>
+</module -->
+
+<module name="Checker">
+  <!-- module name="AvoidStarImport"/ -->
+  <module name="TreeWalker">
+    <module name="LeftCurly">
+      <property name="option" value="nl"/>
+    </module>
+    <module name="NeedBraces">
+      <property name="tokens" value="LITERAL_IF, LITERAL_ELSE"/>
+    </module>
+    <module name="CyclomaticComplexity">
+      <property name="max" value="7"/>
+    </module>
+  </module>
+</module>
+
