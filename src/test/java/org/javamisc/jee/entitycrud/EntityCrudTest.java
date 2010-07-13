@@ -34,7 +34,8 @@ class DummyCrudAction extends CrudAction
 
   public Class<?> findEntityClass()
   {
-    return (Object.class);
+    // FIXME: might check that this.entityClassName equals "DummyEntity"
+    return (DummyEntity.class);
   }
 
 
@@ -360,11 +361,14 @@ public class EntityCrudTest
     Assert.assertEquals(crudAction.getEntityId(), "4711");
     crudAction.setEntityClassName("String");
     Assert.assertEquals(crudAction.getEntityClassName(), "String");
+    crudAction.setEntityId(null);
     crudAction.setEntityClassName("DummyEntity");
     crudAction.getEntityHtml();
     crudAction.setEntityId("1");
     crudAction.getEntityHtml();
     crudAction.setCrudOp("form");
+    crudAction.getEntityHtml();
+    crudAction.setEntityId(null);
     crudAction.getEntityHtml();
     crudAction.setEntityId("3");
     crudAction.setCrudOp("delete");
