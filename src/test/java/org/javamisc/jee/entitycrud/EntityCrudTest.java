@@ -57,7 +57,7 @@ class DummyEntity
   private Integer id;
   private String name;
   private Double x;
-  private DummyEntity dummyDaddy;
+  private DummyEntity daddy;
   private Collection<DummyEntity> dummyKidCollection;
 
 
@@ -103,14 +103,6 @@ class DummyEntity
   @Column(unique = true)
   public String getName()
   {
-    if (this.name == null)
-    {
-      System.err.println("*** DummyEntity with null name ***");
-    }
-    else
-    {
-      System.err.printf("DummyEntity.getName: returning %s\n", this.name);
-    }
     return (this.name);
   }
 
@@ -134,19 +126,19 @@ class DummyEntity
 
 
   @ManyToOne
-  public DummyEntity getDummyDaddy()
+  public DummyEntity getDaddy()
   {
-    return (this.dummyDaddy);
+    return (this.daddy);
   }
 
 
-  public void setDummyDaddy(DummyEntity dummyDaddy)
+  public void setDaddy(DummyEntity daddy)
   {
-    this.dummyDaddy = dummyDaddy;
+    this.daddy = daddy;
   }
 
 
-  @OneToMany(mappedBy = "dummyDaddy")
+  @OneToMany(mappedBy = "daddy")
   public Collection<DummyEntity> getDummyKidCollection()
   {
     return (this.dummyKidCollection);
@@ -189,9 +181,9 @@ class DummyEntityAccess extends EntityAccessAdapter
     }
     if (entityId.intValue() != 1)
     {
-      DummyEntity dummyDaddy = this.dummyEntityMap.get(new Integer(1));
-      d.setDummyDaddy(dummyDaddy);
-      dummyDaddy.getDummyKidCollection().add(d);
+      DummyEntity daddy = this.dummyEntityMap.get(new Integer(1));
+      d.setDaddy(daddy);
+      daddy.getDummyKidCollection().add(d);
     }
     return ((EntityClass) d);
   }
@@ -240,6 +232,18 @@ class DummyEntityAccess extends EntityAccessAdapter
 
 public class EntityCrudTest
 {
+  private static EntityAccess makeEntityAccess()
+  {
+    EntityAccess entityAccess = new DummyEntityAccess();
+    DummyEntity d;
+    for (int i = 2; i < 5; i ++)
+    {
+      d = entityAccess.findEntity(DummyEntity.class, new Integer(i));
+    }
+    return (entityAccess);
+  }
+
+
   @Test
   public void testPropertyNameUtils()
   {
@@ -282,25 +286,6 @@ public class EntityCrudTest
 
 
   @Test
-  public void testEntityOperation()
-  {
-    EntitySetPropertyOperation entitySetPropertyOperation = new EntitySetPropertyOperation("testName", "hello");
-    EntitySetPropertyFromStringOperation entitySetPropertyFromStringOperation = new EntitySetPropertyFromStringOperation("testName", "hello");
-    EntityLinkOperation entityLinkOperation = new EntityLinkOperation("testName", new Integer(1));
-    EntityUnlinkOperation entityUnlinkOperation = new EntityUnlinkOperation("testName", new Integer(1));
-    Assert.assertTrue(entityUnlinkOperation != null);
-  }
-
-
-  @Test
-  public void testEntityAccessAdapter()
-  {
-    EntityAccessAdapter entityAccessAdapter = new EntityAccessAdapter();
-    Assert.assertFalse(entityAccessAdapter.isEntityInstance("blah"));
-  }
-
-
-  @Test
   public void testSetProperty() throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
   {
     DummyEntity e = new DummyEntity();
@@ -317,6 +302,47 @@ public class EntityCrudTest
 
 
   @Test
+  public void testEntityAccess()
+  {
+    EntityAccess a = makeEntityAccess();
+    DummyEntity d;
+    for (int i = 2; i < 5; i ++)
+    {
+      d = a.findEntity(DummyEntity.class, new Integer(i));
+    }
+    d = a.findEntity(DummyEntity.class, new Integer(1));
+    // fetchCollections has side effects only, so nothing to assert here
+    a.fetchCollections(d);
+    Assert.assertFalse(a.isEntityInstance("blah"));
+  }
+
+
+  @Test
+  public void testEntityOperation() throws Exception
+  {
+    EntityAccess entityAccess = makeEntityAccess();
+    DummyEntity entity = entityAccess.findEntity(DummyEntity.class, new Integer(1));
+    String name = "Humpty Dumpty";
+    EntitySetPropertyOperation entitySetPropertyOperation = new EntitySetPropertyOperation("name", name);
+    entitySetPropertyOperation.apply(entity, entityAccess);
+    Assert.assertEquals(entity.getName(), name);
+    Double x = new Double(15.08);
+    EntitySetPropertyFromStringOperation entitySetPropertyFromStringOperation = new EntitySetPropertyFromStringOperation("x", x.toString());
+    entitySetPropertyFromStringOperation.apply(entity, entityAccess);
+    Assert.assertEquals(entity.getX(), x);
+    Integer kidId = new Integer(3);
+    DummyEntity kid = entityAccess.findEntity(DummyEntity.class, kidId);
+    Integer daddyId = new Integer(2);
+    EntityLinkOperation entityLinkOperation = new EntityLinkOperation("daddy", daddyId);
+    entityLinkOperation.apply(kid, entityAccess);
+    Assert.assertEquals(kid.getDaddy().getId(), daddyId);
+    EntityUnlinkOperation entityUnlinkOperation = new EntityUnlinkOperation("daddy", daddyId);
+    entityUnlinkOperation.apply(kid, entityAccess);
+    Assert.assertEquals(kid.getDaddy(), null);
+  }
+
+
+  @Test
   public void testFindUnique()
   {
     Set uniquePropertyNameSet = BeanUtil.findUniquePropertyNameSet(DummyEntity.class);
@@ -327,24 +353,9 @@ public class EntityCrudTest
 
 
   @Test
-  public void testEntityAccess()
-  {
-    DummyEntityAccess a = new DummyEntityAccess();
-    DummyEntity d;
-    for (int i = 2; i < 5; i ++)
-    {
-      d = a.findEntity(DummyEntity.class, new Integer(i));
-    }
-    d = a.findEntity(DummyEntity.class, new Integer(1));
-    // nothing really to assert here
-    a.fetchCollections(d);
-  }
-
-
-  @Test
   public void testCrudAction() throws Exception
   {
-    CrudAction crudAction = new DummyCrudAction(new DummyEntityAccess());
+    CrudAction crudAction = new DummyCrudAction(makeEntityAccess());
     crudAction.setEntityId("4711");
     Assert.assertEquals(crudAction.getEntityId(), "4711");
     crudAction.setEntityClassName("String");
@@ -353,6 +364,12 @@ public class EntityCrudTest
     crudAction.getEntityHtml();
     crudAction.setEntityId("1");
     crudAction.getEntityHtml();
+    crudAction.setCrudOp("form");
+    crudAction.getEntityHtml();
+    crudAction.setEntityId("3");
+    crudAction.setCrudOp("delete");
+    Assert.assertEquals("success", crudAction.execute());
+    // FIXME: put together dummy request to test entity operations
   }
 }
 

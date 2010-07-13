@@ -10,7 +10,6 @@ import static org.javamisc.Util.genericTypecast;
 
 public class EntityUnlinkOperation extends EntityOperation
 {
-  private String propertyName;
   private Integer associatedEntityId;
 
 
@@ -45,7 +44,8 @@ public class EntityUnlinkOperation extends EntityOperation
     }
     else
     {
-      BeanUtil.setProperty(null, this.propertyName, associatedEntity);
+      // not a collection, so just setting property to null
+      BeanUtil.setProperty(entity, this.propertyName, null);
     }
     return (true);
   }

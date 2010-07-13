@@ -503,8 +503,24 @@ public class BeanUtil
   {
     String mutatorName = makeMutatorName(propertyName);
     Class<?> entityClass = entity.getClass();
-    Class<?> valueClass = propertyValue.getClass();
-    Method mutatorMethod = entityClass.getMethod(mutatorName, valueClass);
+    Method mutatorMethod = null;
+    if (propertyValue != null)
+    {
+      Class<?> valueClass = propertyValue.getClass();
+      mutatorMethod = entityClass.getMethod(mutatorName, valueClass);
+    }
+    else
+    {
+      // FIXME: just find any method taking one parameter -- cannot use parameter type now
+      for (Method method : entityClass.getMethods())
+      {
+	if (mutatorName.equals(method.getName()) && (method.getParameterTypes().length == 1))
+	{
+	  mutatorMethod = method;
+	  break;
+	}
+      }
+    }
     // FIXME: ignoring the return value, assuming method returns void
     mutatorMethod.invoke(entity, propertyValue);
   }

@@ -10,8 +10,7 @@ import static org.javamisc.Util.genericTypecast;
 
 public class EntityLinkOperation extends EntityOperation
 {
-  // FIXME: much duplicated cod with EntityUnlinkOperation
-  private String propertyName;
+  // FIXME: much duplicated code with EntityUnlinkOperation
   private Integer associatedEntityId;
 
 
@@ -25,7 +24,7 @@ public class EntityLinkOperation extends EntityOperation
   public boolean apply(Object entity, EntityAccess entityAccess) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException
   {
     System.err.println(String.format("EntityLinkOperation.apply: id = %s", this.associatedEntityId));
-    Class<?> propertyType = BeanUtil.findPropertyType(entity.getClass(), propertyName);
+    Class<?> propertyType = BeanUtil.findPropertyType(entity.getClass(), this.propertyName);
     // FIXME: clumsy and perhaps not so safe way to get at associated entity type
     Class<?> associatedEntityType = BeanUtil.findAssociationPropertyMap(entity).get(this.propertyName);
     System.err.println(String.format("associated entity type for %s: %s, property type: %s", this.propertyName, associatedEntityType.toString(), propertyType.toString()));
