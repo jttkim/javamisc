@@ -98,44 +98,44 @@ public class CsvReader
     {
       if (quoteState)
       {
-	if (line.length() == 0)
-	{
-	  throw new IOException(String.format("line %d: end of line encountered in quoted string", this.lineNumber));
-	}
-	else if (line.startsWith(this.escapedQuote))
-	{
-	  value += this.quoteChar;
-	  line = line.substring(this.escapedQuote.length());
-	}
-	else if (line.startsWith(this.quoteChar))
-	{
-	  quoteState = false;
-	  line = line.substring(this.quoteChar.length());
-	}
-	else
-	{
-	  value += line.substring(0, 1);
-	  line = line.substring(1);
-	}
+        if (line.length() == 0)
+        {
+          throw new IOException(String.format("line %d: end of line encountered in quoted string", this.lineNumber));
+        }
+        else if (line.startsWith(this.escapedQuote))
+        {
+          value += this.quoteChar;
+          line = line.substring(this.escapedQuote.length());
+        }
+        else if (line.startsWith(this.quoteChar))
+        {
+          quoteState = false;
+          line = line.substring(this.quoteChar.length());
+        }
+        else
+        {
+          value += line.substring(0, 1);
+          line = line.substring(1);
+        }
       }
       else
       {
-	if (line.startsWith(this.separator))
-	{
-	  valueList.add(value);
-	  value = "";
-	  line = line.substring(this.separator.length());
-	}
-	else if (line.startsWith(this.quoteChar))
-	{
-	  quoteState = true;
-	  line = line.substring(this.quoteChar.length());
-	}
-	else
-	{
-	  value += line.substring(0, 1);
-	  line = line.substring(1);
-	}
+        if (line.startsWith(this.separator))
+        {
+          valueList.add(value);
+          value = "";
+          line = line.substring(this.separator.length());
+        }
+        else if (line.startsWith(this.quoteChar))
+        {
+          quoteState = true;
+          line = line.substring(this.quoteChar.length());
+        }
+        else
+        {
+          value += line.substring(0, 1);
+          line = line.substring(1);
+        }
       }
     }
     valueList.add(value);

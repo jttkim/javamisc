@@ -51,10 +51,10 @@ public class CsvTable
     {
       for (int j = i + 1; j < this.columnName.length; j++)
       {
-	if (this.columnName[i].equals(this.columnName[j]))
-	{
-	  throw new IOException(String.format("malformed header row: duplicate column name %s for columns %d and %d", this.columnName[i], i, j));
-	}
+        if (this.columnName[i].equals(this.columnName[j]))
+        {
+          throw new IOException(String.format("malformed header row: duplicate column name %s for columns %d and %d", this.columnName[i], i, j));
+        }
       }
     }
     this.columnIndexHash = new HashMap<String, Integer>();
@@ -96,7 +96,7 @@ public class CsvTable
     if (currentRowLength != this.columnName.length)
     {
       this.currentRow = null;
-      throw new IOException(String.format("line %d: number of columns is %d (expected: %d)", this.csvReader.getLineNumber(), currentRow.length, this.columnName.length));
+      throw new IOException(String.format("line %d: number of columns is %d (expected: %d)", this.csvReader.getLineNumber(), this.currentRow.length, this.columnName.length));
     }
     return (true);
   }

@@ -58,8 +58,8 @@
 	<version>2.5</version>
 	<configuration>
 	  <configLocation>${project.basedir}/javamisc_checks.xml</configLocation>
-	  <!-- outputFileFormat>plain</outputFileFormat>
-	  <outputFile>${project.build.directory}/checkstyle-result.txt</outputFile -->
+	  <outputFileFormat>plain</outputFileFormat>
+	  <outputFile>${project.build.directory}/checkstyle-result.txt</outputFile>
 	</configuration>
       </plugin>
     </plugins>

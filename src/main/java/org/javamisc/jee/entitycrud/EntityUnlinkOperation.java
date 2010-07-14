@@ -27,7 +27,7 @@ public class EntityUnlinkOperation extends EntityOperation
     // FIXME: clumsy and perhaps not so safe way to get at associated entity type
     Class<?> associatedEntityType = BeanUtil.findAssociationPropertyMap(entity).get(this.propertyName);
     System.err.println(String.format("associated entity type for %s: %s, property type: %s", this.propertyName, associatedEntityType.toString(), propertyType.toString()));
-    Object associatedEntity = entityAccess.findEntity(associatedEntityType, associatedEntityId);
+    Object associatedEntity = entityAccess.findEntity(associatedEntityType, this.associatedEntityId);
     if (associatedEntity == null)
     {
       System.err.println(String.format("EntityUnlinkOperation: no associated entity of class %s with id %d", associatedEntityType.toString(), this.associatedEntityId.intValue()));

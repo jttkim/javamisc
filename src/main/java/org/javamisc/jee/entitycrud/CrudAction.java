@@ -53,7 +53,7 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
 
   public static String htmlEscape(String s)
   {
-    return(s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br/>\n"));
+    return (s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br/>\n"));
   }
 
 
@@ -225,13 +225,13 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
     {
       if ("*".equals(propertyName))
       {
-	addRemainingProperties = true;
-	break;
+        addRemainingProperties = true;
+        break;
       }
       if (propertyNameSet.contains(propertyName))
       {
-	propertyNameSet.remove(propertyName);
-	orderedPropertyList.add(propertyName);
+        propertyNameSet.remove(propertyName);
+        orderedPropertyList.add(propertyName);
       }
     }
     if (addRemainingProperties)
@@ -303,20 +303,20 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
       s += "<td>";
       if (property == null)
       {
-	s += "<strong><code>%s</code>: null collection</strong>";
+        s += "<strong><code>%s</code>: null collection</strong>";
       }
       else
       {
-	// using multi-value for adding removing: first value is
-	// command ("add" or "remove"), second value is id of entity
-	// to be associated / disassociated
-	s += String.format("<select name = %s>", crudFormParameterName(propertyName));
-	s += "<option name=\"add\">add</option>";
-	s += "<option name=\"remove\">remove</option>";
-	s += "</select>";
-	s += String.format("<input name=\"%s\" value=\"\"/>", crudFormParameterName(propertyName));
-	Collection<?> collection = (Collection<?>) property;
-	s += entityHtmlLinkList(collection);
+        // using multi-value for adding removing: first value is
+        // command ("add" or "remove"), second value is id of entity
+        // to be associated / disassociated
+        s += String.format("<select name = %s>", crudFormParameterName(propertyName));
+        s += "<option name=\"add\">add</option>";
+        s += "<option name=\"remove\">remove</option>";
+        s += "</select>";
+        s += String.format("<input name=\"%s\" value=\"\"/>", crudFormParameterName(propertyName));
+        Collection<?> collection = (Collection<?>) property;
+        s += entityHtmlLinkList(collection);
       }
       s += "</td>";
       s += "</tr>\n";
@@ -329,14 +329,14 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
       String propertyValue = "";
       if (property != null)
       {
-	Integer associatedEntityId = (Integer) getProperty(property, "id");
-	propertyValue = associatedEntityId.toString();
+        Integer associatedEntityId = (Integer) getProperty(property, "id");
+        propertyValue = associatedEntityId.toString();
       }
       s += String.format("<input name=\"%s\" value=\"%s\"/>", crudFormParameterName(propertyName), propertyValue);
       if (property != null)
       {
-	s += "<br/>";
-	s += entityHtmlLink(property);
+        s += "<br/>";
+        s += entityHtmlLink(property);
       }
       s += "</td>";
       s += "</tr>\n";
@@ -349,15 +349,15 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
       String propertyValue = "";
       if (property != null)
       {
-	propertyValue = property.toString();
+        propertyValue = property.toString();
       }
       if (isReadOnly(entity.getClass(), propertyName))
       {
-	s += htmlEscape(propertyValue);
+        s += htmlEscape(propertyValue);
       }
       else
       {
-	s += String.format("<input name=\"%s\" value=\"%s\"/>", crudFormParameterName(propertyName), propertyValue);
+        s += String.format("<input name=\"%s\" value=\"%s\"/>", crudFormParameterName(propertyName), propertyValue);
       }
       s += "</td>";
       s += "</tr>\n";
@@ -388,14 +388,14 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
     {
       if (!isHidden(entity.getClass(), propertyName))
       {
-	if (isReadOnly(entity.getClass(), propertyName))
-	{
-	  s += propertyHtmlTableRow(entity, propertyName);
-	}
-	else
-	{
-	  s += propertyHtmlFormRow(entity, propertyName);
-	}
+        if (isReadOnly(entity.getClass(), propertyName))
+        {
+          s += propertyHtmlTableRow(entity, propertyName);
+        }
+        else
+        {
+          s += propertyHtmlFormRow(entity, propertyName);
+        }
       }
     }
     s += "<tr><td><input type=\"submit\"/></td><td></td></tr>\n";
@@ -422,7 +422,7 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
     String s;
     if (entityList.size() == 0)
     {
-      s = (String.format("<p>no entities of class <code>%s</code> found</p>\n", htmlEscape(entityClassName)));
+      s = (String.format("<p>no entities of class <code>%s</code> found</p>\n", htmlEscape(this.entityClassName)));
     }
     else
     {
@@ -440,10 +440,10 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
     {
       if (this.crudOp != null)
       {
-	if  ("form".equals(this.crudOp))
-	{
-	  return (entityHtmlForm(entity));
-	}
+        if  ("form".equals(this.crudOp))
+        {
+          return (entityHtmlForm(entity));
+        }
       }
       return (entityHtmlTable(entity));
     }
@@ -451,11 +451,11 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
     {
       if ("form".equals(this.crudOp))
       {
-	entity = this.newEntity();
-	if (entity != null)
-	{
-	  return (entityHtmlForm(entity));
-	}
+        entity = this.newEntity();
+        if (entity != null)
+        {
+          return (entityHtmlForm(entity));
+        }
       }
       return (entitySetHtmlList());
     }
@@ -533,55 +533,55 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
     Map<String, String[]> parameterMap = genericTypecast(this.servletRequest.getParameterMap());
     for (String parameterName : parameterMap.keySet())
     {
-      if (parameterName.startsWith(crudParameterPrefix))
+      if (parameterName.startsWith(this.crudParameterPrefix))
       {
-	// FIXME: should use extractor method
-	String crudParameterName = parameterName.substring(crudParameterPrefix.length());
-	// note that multi-value parameters are used for adding and removing from to-many sets
-	String[] v = parameterMap.get(parameterName);
-	// weed out empty strings -- this really should be a proper translation from form parameters to sanitised commands for the session bean
-	if (v.length == 1)
-	{
-	  if (v[0].length() > 0)
-	  {
-	    entityOperationSet.add(new EntitySetPropertyFromStringOperation(crudParameterName, v[0]));
-	  }
-	}
-	else if (v.length == 2)
-	{
-	  if ("add".equals(v[0]) || "add".equals(v[1]))
-	  {
-	    int idIndex = 0;
-	    if ("add".equals(v[0]))
-	    {
-	      idIndex = 1;
-	    }
-	    if (v[idIndex].length() > 0)
-	    {
-	      entityOperationSet.add(new EntityLinkOperation(crudParameterName, new Integer(Integer.parseInt(v[idIndex]))));
-	    }
-	  }
-	  else if ("remove".equals(v[0]) || "remove".equals(v[1]))
-	  {
-	    int idIndex = 0;
-	    if ("add".equals(v[0]))
-	    {
-	      idIndex = 1;
-	    }
-	    if (v[idIndex].length() > 0)
-	    {
-	      entityOperationSet.add(new EntityUnlinkOperation(crudParameterName, new Integer(Integer.parseInt(v[idIndex]))));
-	    }
-	  }
-	  else
-	  {
-	    throw new IllegalArgumentException(String.format("found neither add nor remove command for parameter \"%s\"", crudParameterName));
-	  }
-	}
-	else
-	{
-	  throw new IllegalArgumentException(String.format("found %d values for parameter \"%s\"", v.length, crudParameterName));
-	}
+        // FIXME: should use extractor method
+        String crudParameterName = parameterName.substring(this.crudParameterPrefix.length());
+        // note that multi-value parameters are used for adding and removing from to-many sets
+        String[] v = parameterMap.get(parameterName);
+        // weed out empty strings -- this really should be a proper translation from form parameters to sanitised commands for the session bean
+        if (v.length == 1)
+        {
+          if (v[0].length() > 0)
+          {
+            entityOperationSet.add(new EntitySetPropertyFromStringOperation(crudParameterName, v[0]));
+          }
+        }
+        else if (v.length == 2)
+        {
+          if ("add".equals(v[0]) || "add".equals(v[1]))
+          {
+            int idIndex = 0;
+            if ("add".equals(v[0]))
+            {
+              idIndex = 1;
+            }
+            if (v[idIndex].length() > 0)
+            {
+              entityOperationSet.add(new EntityLinkOperation(crudParameterName, new Integer(Integer.parseInt(v[idIndex]))));
+            }
+          }
+          else if ("remove".equals(v[0]) || "remove".equals(v[1]))
+          {
+            int idIndex = 0;
+            if ("add".equals(v[0]))
+            {
+              idIndex = 1;
+            }
+            if (v[idIndex].length() > 0)
+            {
+              entityOperationSet.add(new EntityUnlinkOperation(crudParameterName, new Integer(Integer.parseInt(v[idIndex]))));
+            }
+          }
+          else
+          {
+            throw new IllegalArgumentException(String.format("found neither add nor remove command for parameter \"%s\"", crudParameterName));
+          }
+        }
+        else
+        {
+          throw new IllegalArgumentException(String.format("found %d values for parameter \"%s\"", v.length, crudParameterName));
+        }
       }
     }
     return (entityOperationSet);

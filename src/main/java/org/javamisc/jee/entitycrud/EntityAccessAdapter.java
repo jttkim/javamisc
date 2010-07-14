@@ -76,23 +76,23 @@ public class EntityAccessAdapter implements EntityAccess
     {
       if (this.isCollectionAccessor(method))
       {
-	try
-	{
-	  Object setObject = method.invoke(entity);
-	  Collection<?> set = genericTypecast(setObject);
-	  for (Object o : set)
-	  {
-	    o.toString();
-	  }
-	}
-	catch (IllegalAccessException e)
-	{
-	  System.err.println(String.format("AccessBean.fetchCollections: caught %s\n", e.toString()));
-	}
-	catch (InvocationTargetException e)
-	{
-	  System.err.println(String.format("AccessBean.fetchCollections: caught %s\n", e.toString()));
-	}
+        try
+        {
+          Object setObject = method.invoke(entity);
+          Collection<?> set = genericTypecast(setObject);
+          for (Object o : set)
+          {
+            o.toString();
+          }
+        }
+        catch (IllegalAccessException e)
+        {
+          System.err.println(String.format("AccessBean.fetchCollections: caught %s\n", e.toString()));
+        }
+        catch (InvocationTargetException e)
+        {
+          System.err.println(String.format("AccessBean.fetchCollections: caught %s\n", e.toString()));
+        }
       }
     }
   }

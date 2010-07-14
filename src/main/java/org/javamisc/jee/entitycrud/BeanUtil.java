@@ -208,10 +208,10 @@ public class BeanUtil
     {
       if (isAccessor(method))
       {
-	if (propertyName.equals(extractPropertyName(method)))
-	{
-	  return (method);
-	}
+        if (propertyName.equals(extractPropertyName(method)))
+        {
+          return (method);
+        }
       }
     }
     return (null);
@@ -235,10 +235,10 @@ public class BeanUtil
     {
       if (isMutator(method))
       {
-	if (propertyName.equals(extractPropertyName(method)))
-	{
-	  return (method);
-	}
+        if (propertyName.equals(extractPropertyName(method)))
+        {
+          return (method);
+        }
       }
     }
     return (null);
@@ -262,7 +262,7 @@ public class BeanUtil
     {
       return (null);
     }
-    return(accessor.getReturnType());
+    return (accessor.getReturnType());
   }
 
 
@@ -298,11 +298,11 @@ public class BeanUtil
     {
       if (isAccessor(method))
       {
-	String propertyName = extractPropertyName(method.getName());
-	if (findMutator(entityClass, propertyName) != null)
-	{
-	  propertyNameSet.add(propertyName);
-	}
+        String propertyName = extractPropertyName(method.getName());
+        if (findMutator(entityClass, propertyName) != null)
+        {
+          propertyNameSet.add(propertyName);
+        }
       }
     }
     return (propertyNameSet);
@@ -341,19 +341,19 @@ public class BeanUtil
       Method mutator = findMutator(entityClass, propertyName);
       if ((accessor.getAnnotation(Id.class) != null) || (mutator.getAnnotation(Id.class) != null))
       {
-	uniquePropertyNameSet.add(propertyName);
+        uniquePropertyNameSet.add(propertyName);
       }
       else
       {
-	Column columnAnnotation = accessor.getAnnotation(Column.class);
-	if (columnAnnotation == null)
-	{
-	  columnAnnotation = mutator.getAnnotation(Column.class);
-	}
-	if (columnAnnotation != null && columnAnnotation.unique())
-	{
-	  uniquePropertyNameSet.add(propertyName);
-	}
+        Column columnAnnotation = accessor.getAnnotation(Column.class);
+        if (columnAnnotation == null)
+        {
+          columnAnnotation = mutator.getAnnotation(Column.class);
+        }
+        if (columnAnnotation != null && columnAnnotation.unique())
+        {
+          uniquePropertyNameSet.add(propertyName);
+        }
       }
     }
     return (uniquePropertyNameSet);
@@ -417,30 +417,30 @@ public class BeanUtil
       Method mutator = findMutator(entityClass, propertyName);
       if ((accessor.getAnnotation(OneToOne.class) != null) || (accessor.getAnnotation(ManyToOne.class) != null) || (mutator.getAnnotation(OneToOne.class) != null) || (mutator.getAnnotation(ManyToOne.class) != null))
       {
-	// System.err.println(String.format("Util.findAssociationPropertyMap: %s: using simple returnType for to-one association", propertyName));
-	associationPropertyMap.put(propertyName, accessor.getReturnType());
+        // System.err.println(String.format("Util.findAssociationPropertyMap: %s: using simple returnType for to-one association", propertyName));
+        associationPropertyMap.put(propertyName, accessor.getReturnType());
       }
       else if ((accessor.getAnnotation(OneToMany.class) != null) || (accessor.getAnnotation(ManyToMany.class) != null) || (mutator.getAnnotation(OneToMany.class) != null) || (mutator.getAnnotation(ManyToMany.class) != null))
       {
-	// System.err.println(String.format("Util.findAssociationPropertyMap: %s: analysing generic returnType for to-many association", propertyName));
-	Type rawToManyType = accessor.getGenericReturnType();
-	if (!(rawToManyType instanceof ParameterizedType))
-	{
-	  throw new IllegalArgumentException(String.format("illegal type for to-many association: %s", rawToManyType.toString()));
-	}
-	ParameterizedType toManyType = (ParameterizedType) rawToManyType;
-	Type[] actualTypeList = toManyType.getActualTypeArguments();
-	if (actualTypeList.length != 1)
-	{
-	  throw new IllegalArgumentException("cannot deal with collections that do not have exactly one type parameter");
-	}
-	Type associatedType = actualTypeList[0];
-	if (!(associatedType instanceof Class<?>))
-	{
-	  throw new IllegalArgumentException("cannot deal with association types that are not classes.");
-	}
-	Class<?> associatedClass = genericTypecast(associatedType);
-	associationPropertyMap.put(propertyName, associatedClass);
+        // System.err.println(String.format("Util.findAssociationPropertyMap: %s: analysing generic returnType for to-many association", propertyName));
+        Type rawToManyType = accessor.getGenericReturnType();
+        if (!(rawToManyType instanceof ParameterizedType))
+        {
+          throw new IllegalArgumentException(String.format("illegal type for to-many association: %s", rawToManyType.toString()));
+        }
+        ParameterizedType toManyType = (ParameterizedType) rawToManyType;
+        Type[] actualTypeList = toManyType.getActualTypeArguments();
+        if (actualTypeList.length != 1)
+        {
+          throw new IllegalArgumentException("cannot deal with collections that do not have exactly one type parameter");
+        }
+        Type associatedType = actualTypeList[0];
+        if (!(associatedType instanceof Class<?>))
+        {
+          throw new IllegalArgumentException("cannot deal with association types that are not classes.");
+        }
+        Class<?> associatedClass = genericTypecast(associatedType);
+        associationPropertyMap.put(propertyName, associatedClass);
       }
     }
     return (associationPropertyMap);
@@ -514,11 +514,11 @@ public class BeanUtil
       // FIXME: just find any method taking one parameter -- cannot use parameter type now
       for (Method method : entityClass.getMethods())
       {
-	if (mutatorName.equals(method.getName()) && (method.getParameterTypes().length == 1))
-	{
-	  mutatorMethod = method;
-	  break;
-	}
+        if (mutatorName.equals(method.getName()) && (method.getParameterTypes().length == 1))
+        {
+          mutatorMethod = method;
+          break;
+        }
       }
     }
     // FIXME: ignoring the return value, assuming method returns void
