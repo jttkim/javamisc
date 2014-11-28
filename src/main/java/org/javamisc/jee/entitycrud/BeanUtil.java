@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.TypeVariable;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.Collection;
@@ -435,9 +436,29 @@ public class BeanUtil
           throw new IllegalArgumentException("cannot deal with collections that do not have exactly one type parameter");
         }
         Type associatedType = actualTypeList[0];
+	if (associatedType instanceof ParameterizedType)
+	{
+	  ParameterizedType ptype = (ParameterizedType) associatedType;
+	  System.err.println(String.format("class %s, property %s: parameterized: %s, raw: %s", entityClass.getName(), propertyName, ptype.toString(), ptype.getRawType().toString()));
+	}
+	if (associatedType instanceof TypeVariable)
+	{
+	  TypeVariable tvar = (TypeVariable) associatedType;
+	  System.err.println(String.format("class %s, property %s: typevar: %s", entityClass.getName(), propertyName, tvar.toString()));
+	  Type[] bounds = tvar.getBounds();
+	  for (Type t : bounds)
+	  {
+	    System.err.println(String.format("  bound: %s, is %sa class", t.toString(), t instanceof Class<?> ? "" : "not "));
+	  }
+	  // FIXME: falling back to type bound as minimal solution. It should be possible to find out the actual type, at least if the entity class considered is defined "... extends EntityBase<ActualClass>", i.e. if the entity class is not parameterized itself.
+	  if (bounds.length == 1)
+	  {
+	    associatedType = bounds[0];
+	  }
+	}
         if (!(associatedType instanceof Class<?>))
         {
-          throw new IllegalArgumentException("cannot deal with association types that are not classes.");
+          throw new IllegalArgumentException(String.format("cannot deal with association types that are not classes (type: %s)", associatedType.toString()));
         }
         Class<?> associatedClass = genericTypecast(associatedType);
         associationPropertyMap.put(propertyName, associatedClass);
