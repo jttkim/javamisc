@@ -27,6 +27,8 @@ public @interface CrudConfig
    * displayed are ignored. Properties that are not listed in the
    * array are not displayed unless the wildcard property {@code "*"}
    * is used.</p>
+   *
+   * @return the property order
    */
   String[] propertyOrder() default {"*"};
 
@@ -46,6 +48,8 @@ public @interface CrudConfig
    *
    * <p>This configuration takes precedence over the {@link
    * #propertyOrder} element.</p>
+   *
+   * @return the view format string
    */
   String entityViewFormat() default "";
 }

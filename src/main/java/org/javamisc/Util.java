@@ -136,6 +136,10 @@ public class Util
    * <a href="http://weblogs.java.net/blog/emcmanus/archive/2007/03/getting_rid_of.html">Eammon
    * McManus's blog</a>
    * </p>
+   *
+   * @param <T> the type to cast the object to
+   * @param o the object
+   * @return the object, cast to {@code T}
    */
   @SuppressWarnings("unchecked")
   public static <T> T genericTypecast(Object o)

@@ -68,6 +68,10 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
 
   /**
    * Find the entity class based on the entityClassName property.
+   *
+   * @return the entity class
+   *
+   * @throws ClassNotFoundException if entity class cannot be found
    */
   public abstract Class<?> findEntityClass() throws ClassNotFoundException;
 
@@ -116,6 +120,10 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
    *
    * @param entity the entity
    * @return text for the link to the entity
+   *
+   * @throws IllegalAccessException if access control violation occurs
+   * @throws InvocationTargetException if invocation fails
+   * @throws NoSuchMethodException if relevant method(s) cannot be found
    */
   public String entityLinkText(Object entity) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
   {
@@ -158,6 +166,8 @@ public abstract class CrudAction extends ActionSupport implements ServletRequest
 
   /**
    * Produce a simple menu of links.
+   *
+   * @return the HTML formatted menu
    */
   protected String crudMenu()
   {

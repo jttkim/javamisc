@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * <p>This class is from grninfo and should be factored out to prevent
  * further duplications</p>
  *
- * @author Jan T. Kim <j.kim@uea.ac.uk>
+ * @author Jan T. Kim {@code jttkim@gmail.com}
  */
 public class CsvReader
 {

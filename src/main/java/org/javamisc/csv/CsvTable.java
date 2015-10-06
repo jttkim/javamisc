@@ -22,7 +22,7 @@ import java.util.HashMap;
  * <p>This class is from grninfo and should be factored out to prevent
  * further duplications</p>
  *
- * @author Jan T. Kim <j.kim@uea.ac.uk>
+ * @author Jan T. Kim {@code jttkim@gmail.com}
  */
 public class CsvTable
 {
@@ -84,6 +84,7 @@ public class CsvTable
    * Advance to next row.
    *
    * @return {@code true} if there was a next row, {@code false} otherwise
+   * @throws IOException if an I/O exception occurs in the underlying {@code java.io} methods
    */
   public boolean next() throws IOException
   {
@@ -109,6 +110,7 @@ public class CsvTable
    *
    * @throws IllegalStateException if there is no current column
    * @throws IllegalArgumentException if the column index is out of range
+   * @return the content of the column as a string
    */
   public String getString(int columnIndex)
   {
@@ -128,6 +130,7 @@ public class CsvTable
    * Access column element by index.
    *
    * @param columnName the column's name
+   * @return the content of the column as a string
    *
    * @throws IllegalStateException if there is no current column
    * @throws IllegalArgumentException if the column name does not exist

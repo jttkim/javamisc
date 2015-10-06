@@ -38,6 +38,7 @@ public interface EntityAccess
    * class.</p>
    *
    * @param entityClass the entity class
+   * @param <EntityClass> the entity class
    * @param id the id of the entity
    * @return the entity
    */
@@ -47,6 +48,7 @@ public interface EntityAccess
    * Find a list of all persisted entities of the entity class.
    *
    * @param entityClass the entity class
+   * @param <EntityClass> the entity class
    * @return the list of all persisted entities
    */
   <EntityClass> List<EntityClass> findEntityList(Class<EntityClass> entityClass);

@@ -45,6 +45,11 @@ public class BeanUtil
    *
    * @param c the class to be instantiated
    * @return an instance of the class, obtained by invoking the parameterless constructor of the class
+   *
+   * @throws NoSuchMethodException if there is no default constructor
+   * @throws InstantiationException if instantiation fails
+   * @throws IllegalAccessException if access violation occurs
+   * @throws InvocationTargetException if constructor invocation fails
    */
   public static Object constructDefaultInstance(Class<?> c) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
   {
@@ -59,6 +64,12 @@ public class BeanUtil
    *
    * @param className the canonical name of the class to be instantiated
    * @return an instance of the class, obtained by invoking the parameterless constructor of the class
+   *
+   * @throws ClassNotFoundException if class with specified name cannot be found
+   * @throws NoSuchMethodException {@link #constructDefaultInstance(Class)}
+   * @throws InstantiationException {@link #constructDefaultInstance(Class)}
+   * @throws IllegalAccessException {@link #constructDefaultInstance(Class)}
+   * @throws InvocationTargetException {@link #constructDefaultInstance(Class)}
    */
   public static Object constructDefaultInstance(String className) throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
   {
@@ -502,6 +513,10 @@ public class BeanUtil
    * @param entity the entity (or general object) to get the property from
    * @param propertyName the name of the property to get
    * @return the property's value
+   *
+   * @throws IllegalAccessException if access control violation occurs
+   * @throws InvocationTargetException if invocation fails
+   * @throws NoSuchMethodException if accessor does not exist
    */
   public static Object getProperty(Object entity, String propertyName) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
   {
@@ -519,6 +534,10 @@ public class BeanUtil
    * @param entity the entity (or general object) to get the property from
    * @param propertyName the name of the property to get
    * @param propertyValue the value to set
+   *
+   * @throws IllegalAccessException if access control violation occurs
+   * @throws InvocationTargetException if invocation fails
+   * @throws NoSuchMethodException if mutator does not exist
    */
   public static void setProperty(Object entity, String propertyName, Object propertyValue) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
   {
@@ -553,7 +572,7 @@ public class BeanUtil
    *
    * <p>This method checks the type of the property and converts the
    * {@code String} accordingly. Currently supported types are:</p>
-   * <table>
+   * <table><caption>currently supported types</caption>
    * <tr><td>{@code String}</td><td>no conversion</td></tr>
    * <tr><td>{@code Integer}</td><td>conversion by {@code Integer.parseInt}</td></tr>
    * <tr><td>{@code Double}</td><td>conversion by {@code Double.parseDouble}</td></tr>
@@ -562,6 +581,10 @@ public class BeanUtil
    * @param entity the object to get the property from
    * @param propertyName the name of the property to get
    * @param propertyValueString the value to set, as a string
+   *
+   * @throws IllegalAccessException if access control violation occurs
+   * @throws InvocationTargetException if invocation fails
+   * @throws NoSuchMethodException if mutator does not exist
    */
   public static void setPropertyFromString(Object entity, String propertyName, String propertyValueString) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
   {
